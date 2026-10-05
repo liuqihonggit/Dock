@@ -27,12 +27,12 @@ internal static class DockDataTemplateHelper
         yield return CreateDataTemplate<IToolContent>(() => new ToolContentControl());
         yield return CreateDataTemplate<IProportionalDockSplitter>(() => new ProportionalStackPanelSplitter
         {
-            [!ProportionalStackPanelSplitter.IsResizingEnabledProperty] = new Binding(nameof(IProportionalDockSplitter.CanResize)),
-            [!ProportionalStackPanelSplitter.PreviewResizeProperty] = new Binding(nameof(IProportionalDockSplitter.ResizePreview))
+            [!ProportionalStackPanelSplitter.IsResizingEnabledProperty] = CompiledBinding.Create<IProportionalDockSplitter, bool>(x => x.CanResize),
+            [!ProportionalStackPanelSplitter.PreviewResizeProperty] = CompiledBinding.Create<IProportionalDockSplitter, bool>(x => x.ResizePreview)
         });
         yield return CreateDataTemplate<IGridDockSplitter>(() => new GridSplitter
         {
-            [!GridSplitter.ResizeDirectionProperty] = new Binding(nameof(IGridDockSplitter.ResizeDirection))
+            [!GridSplitter.ResizeDirectionProperty] = CompiledBinding.Create<IGridDockSplitter, GridResizeDirection>(x => (GridResizeDirection)x.ResizeDirection)
         });
         yield return CreateDataTemplate<IDocumentDock>(() => new DocumentDockControl());
         yield return CreateDataTemplate<IToolDock>(() => new ToolDockControl());
