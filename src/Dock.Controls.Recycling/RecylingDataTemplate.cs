@@ -13,6 +13,7 @@ namespace Avalonia.Controls.Recycling;
 /// </summary>
 public class ControlRecyclingDataTemplate : AvaloniaObject, IRecyclingDataTemplate
 {
+    /// <summary>初始化 ControlRecyclingDataTemplate 的新实例</summary>
     public ControlRecyclingDataTemplate()
     {
         
