@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Avalonia.Data;
 using Dock.Avalonia.Controls;
 using Dock.Controls.ProportionalStackPanel;
 using Dock.Model.Controls;
@@ -25,14 +24,29 @@ internal static class DockDataTemplateHelper
     {
         yield return CreateDataTemplate<IDocumentContent>(() => new DocumentContentControl());
         yield return CreateDataTemplate<IToolContent>(() => new ToolContentControl());
-        yield return CreateDataTemplate<IProportionalDockSplitter>(() => new ProportionalStackPanelSplitter
+        yield return new FuncDataTemplate<IProportionalDockSplitter>((data, _) =>
         {
-            [!ProportionalStackPanelSplitter.IsResizingEnabledProperty] = new Binding(nameof(IProportionalDockSplitter.CanResize)),
-            [!ProportionalStackPanelSplitter.PreviewResizeProperty] = new Binding(nameof(IProportionalDockSplitter.ResizePreview))
+            var splitter = new ProportionalStackPanelSplitter();
+            if (data is not null)
+            {
+                splitter.IsResizingEnabled = data.CanResize;
+                splitter.PreviewResize = data.ResizePreview;
+            }
+            return splitter;
         });
-        yield return CreateDataTemplate<IGridDockSplitter>(() => new GridSplitter
+        yield return new FuncDataTemplate<IGridDockSplitter>((data, _) =>
         {
-            [!GridSplitter.ResizeDirectionProperty] = new Binding(nameof(IGridDockSplitter.ResizeDirection))
+            var splitter = new GridSplitter();
+            if (data is not null)
+            {
+                splitter.ResizeDirection = data.ResizeDirection switch
+                {
+                    Dock.Model.Core.GridResizeDirection.Columns => GridResizeDirection.Columns,
+                    Dock.Model.Core.GridResizeDirection.Rows => GridResizeDirection.Rows,
+                    _ => GridResizeDirection.Auto
+                };
+            }
+            return splitter;
         });
         yield return CreateDataTemplate<IDocumentDock>(() => new DocumentDockControl());
         yield return CreateDataTemplate<IToolDock>(() => new ToolDockControl());
